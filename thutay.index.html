@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bức Thư Tình Gửi Anh 💌</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts Hỗ trợ hoàn hảo 100% tiếng Việt không lỗi font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --wax-color: #a81c2f;
+      --paper-bg: #fdfaf3;
+      --font-body: 'Patrick Hand', 'Be Vietnam Pro', cursive, sans-serif;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: radial-gradient(circle at 50% 30%, #fff1f2 0%, #ffe4e6 50%, #fecdd3 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      perspective: 1200px;
+    }
+
+    /* Font viết tay chuẩn tiếng Việt */
+    .font-handwriting {
+      font-family: var(--font-body);
+      word-spacing: 2px;
+      letter-spacing: 0.3px;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Giấy viết thư cổ điển có kẻ dòng thước ngọc */
+    .vintage-paper {
+      background-color: var(--paper-bg);
+      background-image: 
+        radial-gradient(#e4cfb5 0.75px, transparent 0.75px),
+        repeating-linear-gradient(transparent, transparent 31px, #edd8c4 31px, #edd8c4 32px);
+      background-size: 16px 16px, 100% 32px;
+      box-shadow: 
+        0 20px 40px -10px rgba(120, 53, 15, 0.22),
+        0 0 0 1px rgba(180, 83, 9, 0.12),
+        inset 0 0 45px rgba(217, 119, 6, 0.05);
+    }
+
+    /* Phong bì 3D */
+    .envelope-wrapper {
+      perspective: 1400px;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .envelope-flap-top {
+      transform-origin: top center;
+      transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 30;
+      backface-visibility: hidden;
+    }
+
+    .envelope-wrapper.open .envelope-flap-top {
+      transform: rotateX(180deg);
+      z-index: 5;
+    }
+
+    /* Con dấu sáp đỏ thủ công */
+    .wax-seal {
+      background: radial-gradient(circle at 35% 35%, #d9384e, #9e1428 65%, #570713 100%);
+      box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.45),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.6),
+        0 8px 18px rgba(136, 19, 36, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .wax-seal:hover {
+      transform: scale(1.1) translate(-50%, -50%);
+      box-shadow: 
+        inset 0 2px 6px rgba(255, 255, 255, 0.6),
+        inset 0 -4px 7px rgba(0, 0, 0, 0.7),
+        0 12px 26px rgba(136, 19, 36, 0.65);
+    }
+
+    /* Hiệu ứng nhịp đập mời mở */
+    @keyframes seal-pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.08); }
+    }
+    .pulse-seal {
+      animation: seal-pulse 2.2s infinite ease-in-out;
+    }
+
+    @keyframes float-gentle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(0.8deg); }
+    }
+    .float-envelope {
+      animation: float-gentle 4.5s ease-in-out infinite;
+    }
+
+    /* Cuộn thanh thư */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #fdf5ec;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #e0b492;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #c68c63;
+    }
+
+    /* Bay tim tương tác */
+    .click-heart {
+      position: absolute;
+      pointer-events: none;
+      animation: heart-burst 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes heart-burst {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+      }
+      50% {
+        opacity: 0.95;
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.25) rotate(var(--rot));
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--tx) * 1.3), calc(-50% + var(--ty) - 60px)) scale(1.5) rotate(var(--rot));
+      }
+    }
+  </style>
+</head>
+<body class="relative flex flex-col items-center justify-center min-h-screen text-slate-800 select-none overflow-y-auto py-10 px-4">
+
+  <!-- Canvas cánh hoa và trái tim bay nền -->
+  <canvas id="petalsCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+  <!-- MÀN HÌNH PHONG BÌ THƯ (Trạng thái đóng) -->
+  <main id="envelopeScene" class="relative z-10 flex flex-col items-center justify-center w-full max-w-lg transition-all duration-700">
+    
+    <!-- Tiêu đề giới thiệu -->
+    <div id="envelopeHeader" class="text-center mb-6 transition-all duration-500">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm border border-rose-200/90 text-rose-700 text-xs sm:text-sm font-medium mb-3 shadow-sm">
+        <span class="animate-bounce">✨</span> Gửi đến người em yêu nhất
+      </div>
+      <h1 class="font-serif-title text-3xl sm:text-4xl text-rose-900 font-bold tracking-normal drop-shadow-sm">
+        Bức Thư Tình Gửi Anh
+      </h1>
+      <p class="text-rose-700/80 text-xs sm:text-sm mt-1.5">
+        Chạm vào con dấu sáp đỏ để mở thư 💌
+      </p>
+    </div>
+
+    <!-- Khung phong bì 3D -->
+    <div id="envelopeContainer" class="envelope-wrapper float-envelope relative w-[315px] sm:w-[420px] h-[225px] sm:h-[285px] cursor-pointer" onclick="openEnvelope()">
+      
+      <!-- Lưng phong bì bên trong -->
+      <div class="absolute inset-0 bg-[#e3cdb2] rounded-2xl shadow-2xl border border-[#d3b694] overflow-hidden">
+        <div class="absolute inset-0 opacity-15" style="background-image: radial-gradient(#9e2a2b 1.2px, transparent 1.2px); background-size: 14px 14px;"></div>
+      </div>
+
+      <!-- Tờ giấy thư nhô nhẹ lên trong phong bì -->
+      <div id="envelopePaperPeek" class="absolute left-6 right-6 bottom-4 h-[88%] bg-[#fdfaf3] rounded-xl shadow-sm border border-amber-200/70 p-4 transition-all duration-750 ease-out flex flex-col justify-start">
+        <div class="w-24 h-2 bg-rose-200 rounded mb-3"></div>
+        <div class="w-full h-1.5 bg-amber-100 rounded mb-2"></div>
+        <div class="w-4/5 h-1.5 bg-amber-100 rounded mb-2"></div>
+        <div class="w-3/4 h-1.5 bg-amber-100 rounded"></div>
+      </div>
+
+      <!-- Nắp gập đỉnh phong bì (Top Flap 3D) -->
+      <div id="envelopeFlap" class="envelope-flap-top absolute top-0 left-0 right-0 h-0 border-l-[157.5px] sm:border-l-[210px] border-l-transparent border-r-[157.5px] sm:border-r-[210px] border-r-transparent border-t-[135px] sm:border-t-[168px] border-t-[#dfc3a3] drop-shadow-md">
+      </div>
+
+      <!-- Mặt trước túi phong bì (Tạo hình các cạnh) -->
+      <div class="absolute inset-0 pointer-events-none z-20">
+        <!-- Cánh trái -->
+        <div class="absolute bottom-0 left-0 w-0 h-0 border-b-[225px] sm:border-b-[285px] border-b-[#edd3b6] border-r-[157.5px] sm:border-r-[210px] border-r-transparent rounded-bl-2xl"></div>
+        <!-- Cánh phải -->
+        <div class="absolute bottom-0 right-0 w-0 h-0 border-b-[225px] sm:border-b-[285px] border-b-[#e4c9ac] border-l-[157.5px] sm:border-l-[210px] border-l-transparent rounded-br-2xl"></div>
+        <!-- Cánh dưới trùm lên -->
+        <div class="absolute bottom-0 left-0 right-0 h-0 border-l-[157.5px] sm:border-l-[210px] border-l-transparent border-r-[157.5px] sm:border-r-[210px] border-r-transparent border-b-[145px] sm:border-b-[185px] border-b-[#f4dec5] rounded-b-2xl drop-shadow-sm"></div>
+      </div>
+
+      <!-- Tem thư tình yêu cổ điển -->
+      <div class="absolute top-4 right-4 z-25 p-1 rounded-sm flex flex-col items-center justify-center w-14 h-17 sm:w-16 sm:h-20 bg-[#fbf5eb] border-2 border-dashed border-[#bfa588] shadow-sm">
+        <span class="text-[9px] font-mono text-stone-500 uppercase tracking-tight">Kỷ Niệm</span>
+        <span class="text-xl sm:text-2xl mt-0.5">🌸</span>
+        <span class="text-[9px] font-bold text-rose-700 tracking-wider">LOVE YOU</span>
+      </div>
+
+      <!-- Dấu bưu điện kỷ niệm in chìm -->
+      <div class="absolute top-7 right-16 z-25 w-14 h-14 rounded-full border-2 border-dashed border-rose-800/30 flex items-center justify-center text-[8px] font-mono text-rose-800/50 rotate-12 uppercase pointer-events-none">
+        Forever • Love
+      </div>
+
+      <!-- Dòng chữ người gửi -->
+      <div class="absolute bottom-6 left-6 z-25 pointer-events-none">
+        <span class="font-serif-title italic text-rose-950 font-bold text-lg sm:text-xl block">Gửi yêu của em</span>
+        <p class="text-[11px] text-stone-600 font-medium">Bức thư tay nhỏ gửi riêng cho anh</p>
+      </div>
+
+      <!-- Con dấu sáp đỏ Wax Seal chính giữa -->
+      <div id="waxSealBtn" class="wax-seal pulse-seal absolute top-[130px] sm:top-[162px] left-1/2 w-14 h-14 sm:w-16 sm:h-16 z-40 flex items-center justify-center" title="Nhấn con dấu để mở thư">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-rose-300/50 flex items-center justify-center shadow-inner">
+          <span class="text-xl sm:text-2xl filter drop-shadow">❤️</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hướng dẫn mở -->
+    <div class="mt-8 flex items-center gap-2 text-rose-600 text-xs sm:text-sm font-medium animate-pulse">
+      <span>Chạm vào con dấu sáp để mở thư</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </div>
+  </main>
+
+  <!-- MÀN HÌNH LÁ THƯ VIẾT TAY HOÀN CHỈNH -->
+  <section id="letterContainer" class="hidden fixed inset-0 z-40 flex items-center justify-center p-3 sm:p-6 overflow-y-auto backdrop-blur-md bg-stone-900/30 opacity-0 transition-opacity duration-700">
+    
+    <!-- Trang giấy thư vintage -->
+    <div id="letterPaper" class="vintage-paper relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-2xl p-5 sm:p-9 text-stone-800 shadow-2xl transition-all duration-700 transform scale-90 translate-y-8 overflow-hidden border border-amber-300/80">
+      
+      <!-- Họa tiết hoa lá khô trang trí -->
+      <div class="absolute top-2 left-3 select-none pointer-events-none opacity-30 text-2xl">🌿</div>
+      <div class="absolute top-2 right-3 select-none pointer-events-none opacity-30 text-2xl">🌸</div>
+      <div class="absolute bottom-2 right-4 select-none pointer-events-none opacity-30 text-3xl">🕊️</div>
+
+      <!-- Thanh công cụ phía trên trang thư -->
+      <div class="flex items-center justify-between pb-3 border-b border-amber-300/60 mb-4 z-10">
+        <div class="flex items-center gap-2">
+          <span class="text-xs uppercase tracking-widest text-amber-900/80 font-bold font-mono">Thư Tay Tình Yêu</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
+        </div>
+
+        <!-- Nút gấp lại phong bì -->
+        <button id="closeLetterBtn" onclick="closeEnvelope()" class="flex items-center gap-1 px-3 py-1 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs sm:text-sm font-semibold transition-all shadow-sm active:scale-95" title="Gấp thư lại">
+          <span>Gấp lại</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Nội dung thư viết tay - Font Patrick Hand chuẩn tiếng Việt mượt mà -->
+      <div id="letterContentArea" class="custom-scrollbar overflow-y-auto pr-2 sm:pr-4 space-y-5 text-stone-800 font-handwriting">
+        
+        <!-- Tiêu đề lá thư -->
+        <div class="font-serif-title text-2xl sm:text-3xl text-rose-900 font-bold leading-normal">
+          Gửi yêu của em,
+        </div>
+
+        <!-- Đoạn 1 -->
+        <p class="text-xl sm:text-2xl leading-[2.1rem] sm:leading-[2.4rem] text-stone-800 text-justify">
+          Tình yêu của chúng ta lại kì diệu đến như thế và cũng xảy ra siu bất ngờ. Em không tin có ngày em sẽ gặp được một người kiên nhẫn và bao dung mình đến thế. Thay vì cô đơn một mình, chúng ta bây giờ có thể chia sẻ những chuyện vui buồn với nhau hay kể cả là những vụn vặt hàng ngày trong cuộc sống. Em thật sự rất vui và hạnh phúc đó!.
+        </p>
+
+        <!-- Đoạn 2 -->
+        <p class="text-xl sm:text-2xl leading-[2.1rem] sm:leading-[2.4rem] text-stone-800 text-justify">
+          Đối với em, sự xuất hiện của anh không chỉ là thêm một người mà còn là liều thuốc chữa lành tinh thần cho em sau những ngày dài một mình đánh nhau với cuộc sống này. Và hiện giờ, em dường như đã quen với sự tồn tại của anh, len lỏi vào từng chút nhỏ bé quanh em hàng ngày. Lần đầu tiên em biết lo lắng cho một người nhiều đến như thế, để tâm đến sức khoẻ họ ra sao. Anh khiến em biết tình yêu nó đẹp và tuyệt vời như nào, khiến em yêu cuộc đời của mình hơn rất nhiều, tích cực hơn mỗi ngày nữa. Em thật sự rất cảm ơn yêu vì đến với em như một món quà tuyệt vời nhất suốt 20 năm qua.
+        </p>
+
+        <!-- Đoạn 3 -->
+        <p class="text-xl sm:text-2xl leading-[2.1rem] sm:leading-[2.4rem] text-stone-800 text-justify">
+          Em không dám khẳng định tương lai chúng ta như thế nào, nhưng em mong chúng ta sẽ ở bên cạnh đồng hành, yêu thương nhau lâu dài. Không chỉ là 1 năm, 2 năm mà em mong muốn là cả cuộc đời. Anh phải là tình đầu đồng thời cũng là tình cuối của em nhé!
+        </p>
+
+        <!-- Lời kết & Ký tên -->
+        <div class="pt-4 pb-2 text-right">
+          <p class="font-serif-title italic text-2xl sm:text-3xl text-rose-800 font-bold mb-1">
+            Em yêu anh nhiều ❤️
+          </p>
+          <p class="text-lg sm:text-xl text-stone-600 italic">
+            Mãi mãi là của anh.
+          </p>
+        </div>
+
+        <!-- Khung tương tác thả tim cuối thư -->
+        <div class="pt-4 flex flex-col items-center justify-center border-t border-amber-300/50 mt-4">
+          <button id="sendLoveBtn" onclick="createHeartShower()" class="group flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-medium shadow-md hover:shadow-rose-400/50 hover:scale-105 active:scale-95 transition-all text-sm font-sans">
+            <span class="group-hover:animate-ping inline-block">💖</span>
+            <span>Gửi ngàn nụ hôn & cái ôm tới anh</span>
+          </button>
+          <span class="text-[12px] text-stone-500 mt-2 font-sans font-light">Chạm vào bất cứ đâu trên màn hình để thả tim bay</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // ----------------------------------------------------
+    // 1. Hiệu ứng mở / đóng phong bì 3D
+    // ----------------------------------------------------
+    const envelopeContainer = document.getElementById('envelopeContainer');
+    const envelopePaperPeek = document.getElementById('envelopePaperPeek');
+    const letterContainer = document.getElementById('letterContainer');
+    const letterPaper = document.getElementById('letterPaper');
+    const envelopeHeader = document.getElementById('envelopeHeader');
+
+    function openEnvelope() {
+      // 1. Mở nắp phong bì
+      envelopeContainer.classList.add('open');
+      
+      // 2. Giấy nhô lên
+      envelopePaperPeek.style.transform = "translateY(-75px)";
+      envelopeHeader.style.opacity = "0.3";
+
+      // 3. Pháo hoa tim nở rộ
+      createHeartShower(22);
+
+      // 4. Mở lá thư toàn màn hình
+      setTimeout(() => {
+        letterContainer.classList.remove('hidden');
+        void letterContainer.offsetWidth; // trigger reflow
+        letterContainer.classList.remove('opacity-0');
+        letterContainer.classList.add('opacity-100');
+        
+        letterPaper.classList.remove('scale-90', 'translate-y-8');
+        letterPaper.classList.add('scale-100', 'translate-y-0');
+      }, 550);
+    }
+
+    function closeEnvelope() {
+      // Thu nhỏ và ẩn thư
+      letterPaper.classList.remove('scale-100', 'translate-y-0');
+      letterPaper.classList.add('scale-90', 'translate-y-8');
+      letterContainer.classList.remove('opacity-100');
+      letterContainer.classList.add('opacity-0');
+
+      setTimeout(() => {
+        letterContainer.classList.add('hidden');
+        // Trả phong bì về vị trí ban đầu
+        envelopePaperPeek.style.transform = "translateY(0)";
+        envelopeContainer.classList.remove('open');
+        envelopeHeader.style.opacity = "1";
+      }, 500);
+    }
+
+    // ----------------------------------------------------
+    // 2. Cánh hoa đào & Trái tim bay lãng mạn (Canvas)
+    // ----------------------------------------------------
+    const canvas = document.getElementById('petalsCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const PARTICLE_COUNT = 38;
+
+    class RomanticParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * -height * 0.4;
+        this.size = Math.random() * 9 + 6;
+        this.speedY = Math.random() * 1.1 + 0.6;
+        this.speedX = Math.random() * 0.8 - 0.4;
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = (Math.random() - 0.5) * 1.8;
+        this.opacity = Math.random() * 0.45 + 0.35;
+        this.isHeart = Math.random() > 0.6;
+        const colors = ['#f472b6', '#fb7185', '#fda4af', '#fecdd3', '#e11d48'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += Math.sin(this.y * 0.015) * 0.8 + this.speedX;
+        this.rotation += this.rotationSpeed;
+        if (this.y > height + 20 || this.x < -30 || this.x > width + 30) {
+          this.reset();
+          this.y = -20;
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate((this.rotation * Math.PI) / 180);
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+
+        if (this.isHeart) {
+          const s = this.size * 0.75;
+          ctx.beginPath();
+          ctx.moveTo(0, s / 4);
+          ctx.quadraticCurveTo(0, 0, s / 4, 0);
+          ctx.quadraticCurveTo(s / 2, 0, s / 2, s / 4);
+          ctx.quadraticCurveTo(s / 2, 0, (s * 3) / 4, 0);
+          ctx.quadraticCurveTo(s, 0, s, s / 4);
+          ctx.quadraticCurveTo(s, s / 2, (s * 3) / 4, (s * 3) / 4);
+          ctx.lineTo(s / 2, s);
+          ctx.lineTo(s / 4, (s * 3) / 4);
+          ctx.quadraticCurveTo(0, s / 2, 0, s / 4);
+          ctx.fill();
+        } else {
+          ctx.beginPath();
+          ctx.ellipse(0, 0, this.size, this.size / 2.2, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new RomanticParticle());
+    }
+
+    function animatePetals() {
+      ctx.clearRect(0, 0, width, height);
+      for (let p of particles) {
+        p.update();
+        p.draw();
+      }
+      requestAnimationFrame(animatePetals);
+    }
+    animatePetals();
+
+    // ----------------------------------------------------
+    // 3. Hiệu ứng chạm / click tạo trái tim bay
+    // ----------------------------------------------------
+    window.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('#closeLetterBtn')) return;
+      spawnClickHeart(e.clientX, e.clientY);
+    });
+
+    const heartEmojis = ['💖', '💕', '🌸', '✨', '💗', '❤️', '🌹'];
+
+    function spawnClickHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'click-heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      
+      const tx = (Math.random() - 0.5) * 120 + 'px';
+      const ty = -(Math.random() * 85 + 40) + 'px';
+      const rot = (Math.random() - 0.5) * 60 + 'deg';
+      const fontSize = Math.random() * 12 + 18 + 'px';
+
+      heart.style.setProperty('--tx', tx);
+      heart.style.setProperty('--ty', ty);
+      heart.style.setProperty('--rot', rot);
+      heart.style.fontSize = fontSize;
+      heart.style.left = `${x}px`;
+      heart.style.top = `${y}px`;
+
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1100);
+    }
+
+    function createHeartShower(count = 20) {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const offsetX = (Math.random() - 0.5) * 280;
+          const offsetY = (Math.random() - 0.5) * 200;
+          spawnClickHeart(centerX + offsetX, centerY + offsetY);
+        }, i * 40);
+      }
+    }
+  </script>
+</body>
+</html>
